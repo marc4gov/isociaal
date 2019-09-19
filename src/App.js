@@ -1,8 +1,8 @@
 import React, {Component} from 'react'
 
-
 import './App.css'
 import {Board} from 'react-trello'
+import Board2 from './Board2'
 import update from 'immutability-helper'
 import CaseForm from './CaseForm'
 import ProductForm from './ProductForm'
@@ -11,18 +11,30 @@ import ZorgaanbiederForm from './ZorgaanbiederForm'
 import AfspraakForm from './AfspraakForm'
 
 const data = require('./data.json')
+const data2 = require('./data2.json')
+
 const products = require('./productcode.json')
 const cases = require('./casus.json')
+import {steps, stepsFuture, makeCard} from './steps'
 
+function sleep( millisecondsToWait )
+{
+    var now = new Date().getTime();
+    while ( new Date().getTime() < now + millisecondsToWait )
+    {
+        console.log("waiting...")
+    }
+}
 
 class App extends Component {
 
     constructor(props) {
         super(props);
         this.state = {boardData: {lanes: []}, 
+                        board2Data: {lanes: []},
                         products: [], cases: [], 
                         card: {}, 
-                        case: null, 
+                        case: 1, 
                         productCategory: "40",
                         product: "40A01",
                         afspraken: [],
@@ -40,47 +52,30 @@ class App extends Component {
         this.handleZorgaanbiederChange = this.handleZorgaanbiederChange.bind(this);
         
         this.addCaseCard = this.addCaseCard.bind(this);
+        this.playCase = this.playCase.bind(this);
+        
         this.addAfspraakCard = this.addAfspraakCard.bind(this);
         this.addDeclaratieCard = this.addDeclaratieCard.bind(this);
-        //this.compareLaneAndCard = this.compareLaneAndCard.bind(this);
-        
       }
 
-     handleDragStart = (cardId, laneId) => {
-        console.log('drag started')
-        console.log(`cardId: ${cardId}`)
-        console.log(`laneId: ${laneId}`)
-        
-    }
-    
-     handleDragEnd = (cardId, sourceLaneId, targetLaneId) => {
-        console.log('drag ended')
-        console.log(`cardId: ${cardId}`)
-        console.log(`sourceLaneId: ${sourceLaneId}`)
-        console.log(`targetLaneId: ${targetLaneId}`)
-        //this.setState({startLaneId: sourceLaneId, endLaneId: targetLaneId})
-        const card = this.getCard(targetLaneId, cardId)
-        console.log(card)
-        if (sourceLaneId === 'TOEGANG' && targetLaneId === 'TOEWIJZINGEN') {
-            this.addBerichtCard('301-302', 'TOEWIJZINGEN', card)
-        }
-
-    }
-    setEventBus = eventBus => {
-        this.setState({eventBus})
-    }
-
-    async componentWillMount() {
+      async componentWillMount() {
         const response = await this.getBoard()
+        const response4 = await this.getBoard2()
+        
         const response2 = await this.getProducts()
         const response3 = await this.getCases()
         
-        this.setState({boardData: response, products: response2, cases: response3})
+        this.setState({boardData: response, board2Data: response4, products: response2, cases: response3})
     }
 
     getBoard() {
         return new Promise(resolve => {
             resolve(data)
+        })
+    }
+    getBoard2() {
+        return new Promise(resolve => {
+            resolve(data2)
         })
     }
 
@@ -96,37 +91,65 @@ class App extends Component {
         })
     }
 
-    setBericht(bericht, card) {
+    handleDragStart = (cardId, laneId) => {
+        console.log('drag started')
+        console.log(`cardId: ${cardId}`)
+        console.log(`laneId: ${laneId}`)
+        
+    }
+    
+    handleDragEnd = (cardId, sourceLaneId, targetLaneId) => {
+        console.log('drag ended')
+        console.log(`cardId: ${cardId}`)
+        console.log(`sourceLaneId: ${sourceLaneId}`)
+        console.log(`targetLaneId: ${targetLaneId}`)
+        //this.setState({startLaneId: sourceLaneId, endLaneId: targetLaneId})
+        const card = this.getCard(targetLaneId, cardId)
+        console.log(card)
+        if (sourceLaneId === 'TOEGANG' && targetLaneId === 'TOEWIJZINGEN') {
+            this.addBerichtCardBoard2('Toewijzing', 'ZORGAANBIEDER', card)
+        }
+    }
+
+    setEventBus = eventBus => {
+        this.setState({eventBus})
+    }
+
+    setEventBus2 = eventBus2 => {
+        this.setState({eventBus2})
+    }
+
+    setBericht(title, card) {
+        let tag = ""
+        switch(title){
+            case "Toewijzing":
+              tag = "301";
+              break;
+            case "Start Zorg":
+              tag = "315";
+              break;
+            case "Declaratie":
+              tag = "303d";
+              break;
+            default:
+              tag = "";
+          }
         const newcard = {
-            id: "Bericht",
-            title: "Bericht voor " + card.title,
-            label: "van: " + this.state.gemeente,
+            id: "Bericht_" + card.id,
+            title: title,
+            label: this.state.gemeente,
             description: card.description,
-            tags: [{"key": bericht, "title": bericht, "bgcolor": "orange"}]
+            tags: [{"key": tag, "title": tag, "bgcolor": "orange"}]
         }
         return newcard
     }
 
     setCase() {
         const cases = this.state.cases
-        console.log(cases)
         const cs = this.state.case
-        console.log(cs)
         const casus = cases.filter((cas) => {return cas.Casus === cs})
-        console.log(casus)
-        const newcard = {
-            id: "Casus" + cs + "Actie",
-            title: "Casus " + cs,
-            label: this.state.gemeente,
-            description: casus[0].Actie + "; " + casus[0].Reactie,
-            tags: Array.from(new Set(casus[0].Berichten.split(" "))).map((tag) =>  {
-                let obj = {}
-                obj["title"] = tag
-                obj["bgcolor"] = "orange"
-                return obj
-            })
-        }
-        return newcard
+        const tgs = Array.from(new Set(casus[0].Berichten.split(" ")))
+        return makeCard("Casus " + cs, this.state.gemeente, casus[0].Actie + "; " + casus[0].Reactie, tgs)
     }
 
     getLane(laneId) {
@@ -138,19 +161,12 @@ class App extends Component {
         const lane = lanes.filter((l) => l.id === laneId)[0]
         return lane.cards.filter((c) => c.id === cardId)[0]
     }
-    
 
     compareLaneAndCard = (laneId, card) => {
         const lane = this.getLane(laneId)
-        console.log(lane)
-        console.log(card)
-        console.log("1: ", lane.cards.map((c) => c.id.substring(8)))
-        console.log("2", card.id.substring(10))
         const card2 = lane.cards.filter((c) => {
             return c.id.substring(8) === card.id.substring(10)
         })[0]
-        console.log(card.tags)
-        console.log("Card2 tags: ", card2.tags)
         return JSON.stringify(card.tags)===JSON.stringify(card2.tags)
     }
 
@@ -164,7 +180,6 @@ class App extends Component {
     }
 
     setAfspraak() {
-        const prcat = this.state.productCategory
         const prcode = this.state.product
         const afspraken = this.state.afspraken
 
@@ -185,7 +200,6 @@ class App extends Component {
     }
 
     setDeclaratie() {
-        const prcat = this.state.productCategory
         const prcode = this.state.product
         const afspraken = this.state.afspraken
         const tgs = afspraken.map((tag) =>  {
@@ -205,33 +219,56 @@ class App extends Component {
             id: "Declaratie_" + prcode + "_" + this.state.zorgaanbieder + "_" + this.state.gemeente,
             title: this.state.zorgaanbieder,
             label: this.state.gemeente,
-            description: prcode + ": " + this.getProduct(prcode) + "\P:50 x Q:20 = 1000",
+            description: prcode + ": " + this.getProduct(prcode) + "        P:50 x Q:20 = 1000",
             tags: tgs
         }
         return newcard
     }
 
-    completeCard = () => {
-        this.state.eventBus.publish({
-            type: 'ADD_CARD',
-            laneId: 'COMPLETED',
-            card: {id: 'Milk', title: 'Buy Milk', label: '15 mins', description: 'Use Headspace app'}
-        })
-        this.state.eventBus.publish({type: 'REMOVE_CARD', laneId: 'PLANNED', cardId: 'Milk'})
+    playCase = () => {
+        console.log("play Case")
+        const casus = this.state.case
+        const prcode = this.state.product 
+        const description = prcode + ": " + this.getProduct(prcode)
+        const stappen = steps(casus, description, this.state.gemeente, this.state.zorgaanbieder)
+        stappen.map((stap) => { this.state.eventBus2.publish(stap)})   
     }
-
+    
+    playFuture = () => {
+        console.log("play Future")
+        const casus = this.state.case
+        let stappen = []
+        switch(casus) {
+            case 1: 
+                stappen = stepsFuture(casus)
+                stappen.map((step) => { this.state.eventBus2.publish(step)})
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            default:
+        }        
+    }
     addCaseCard = () => {
-        
         this.state.eventBus.publish({
             type: 'ADD_CARD',
             laneId: 'CASUS',
             card: this.setCase()
         })
+        this.playCase()
     }
 
     addBerichtCard = (bericht, laneId, card) => {
-        
         this.state.eventBus.publish({
+            type: 'ADD_CARD',
+            laneId: laneId,
+            card: this.setBericht(bericht, card)
+        })
+    }
+
+    addBerichtCardBoard2 = (bericht, laneId, card) => {
+        this.state.eventBus2.publish({
             type: 'ADD_CARD',
             laneId: laneId,
             card: this.setBericht(bericht, card)
@@ -244,10 +281,11 @@ class App extends Component {
             laneId: 'INKOOP',
             card: this.setAfspraak()
         })
+        this.playFuture()
+
     }
 
-    addDeclaratieCard = () => {
-        
+    addDeclaratieCard = () => { 
         this.state.eventBus.publish({
             type: 'ADD_CARD',
             laneId: 'DECLARATIE',
@@ -276,7 +314,7 @@ class App extends Component {
     }
 
     handleCardClick = (cardId) => {
-        console.log(card)
+        console.log(cardId)
         const card = this.getCard('DECLARATIE', cardId)
         if (this.compareLaneAndCard('TOEWIJZINGEN',card)) {
             this.addBerichtCard('303d-304', 'DECLARATIE', card)
@@ -284,7 +322,8 @@ class App extends Component {
     }
 
     handleCaseChange(casus) {
-        this.setState({case: casus});
+        console.log(casus)
+        this.setState({case: parseInt(casus)});
     }
 
     handleProductCategoryChange(pc) {
@@ -302,59 +341,63 @@ class App extends Component {
 
     handleGemeenteChange(gem) {
         this.setState({gemeente: gem});
+        const data = this.state.board2Data
+        const newData = update(data, {lanes: {2: {label: {$set: gem}}}}) 
+        this.setState({board2Data: newData})
     }
 
     handleZorgaanbiederChange(zb) {
         this.setState({zorgaanbieder: zb});
+        const data = this.state.board2Data
+        const newData = update(data, {lanes: {1: {label: {$set: zb}}}}) 
+        this.setState({board2Data: newData})
     }
 
-    render() {
+    render() {     
         return (
             <div className="App">
                 <div className="App-header">
                     <h3>Future Lane iSociaal</h3>
                 </div>
-                <div className="App-intro">
+                {/* <div className="App-intro"> */}
                 <div className="wrapper">
-                <div>
-                    <CaseForm casus={this.state.case} onCaseChange={this.handleCaseChange} />
-                    <button onClick={this.addCaseCard} style={{margin: 5}}>
-                        Voeg Casus toe
-                    </button> Casus {this.state.case}
-                
-                </div>
-                
+
+                <CaseForm casus={this.state.case} onCaseChange={this.handleCaseChange} />
+                <button onClick={this.addCaseCard} style={{margin: 5}}>
+                    Voeg Casus toe
+                </button> Casus {this.state.case}               
+
                 <ProductForm 
-                    products={this.state.products} 
+                    products={this.state.products}
                     prcode={this.state.product} 
                     prcat={this.state.productCategory} 
                     afspraak={this.state.afspraak} 
                     onProductChange={this.handleProductChange} 
                     onProductCategoryChange={this.handleProductCategoryChange} 
-                    onAfspraakChange={this.handleAfspraakChange}
-                      
+                    onAfspraakChange={this.handleAfspraakChange}     
                 />
-            
                 <GemeenteForm gemeente={this.state.gemeente} onGemeenteChange={this.handleGemeenteChange} />
-
                 <ZorgaanbiederForm zorgaanbieder={this.state.zorgaanbieder} onZorgaanbiederChange={this.handleZorgaanbiederChange} />
+                <AfspraakForm afspraken={this.state.afspraken} onAfspraakChange={this.handleAfspraakChange} />
 
-                    <AfspraakForm afspraken={this.state.afspraken} onAfspraakChange={this.handleAfspraakChange} />
+                <button onClick={this.addAfspraakCard} style={{margin: 5}}>
+                    Maak afspraak
+                </button>
 
-                    <button onClick={this.addAfspraakCard} style={{margin: 5}}>
-                        Maak afspraak
-                    </button>
+                <button onClick={this.addDeclaratieCard} style={{margin: 5}}>
+                    Declareer
+                </button>
 
-                    <button onClick={this.addDeclaratieCard} style={{margin: 5}}>
-                        Declareer
-                    </button>
+                <button onClick={this.playCase} style={{margin: 5}}>
+                    Test
+                </button>
 
                 </div>
 
 
-                </div>
+                
                     <Board
-                        //editable
+                        editable
                         onCardAdd={this.handleCardAdd}
                         onCardClick={this.handleCardClick}                
                         data={this.state.boardData}
@@ -364,10 +407,18 @@ class App extends Component {
                         handleDragStart={this.handleDragStart}
                         handleDragEnd={this.handleDragEnd}
                         tagStyle={{fontSize: '80%'}}
-                        style={{backgroundColor: 'darkorchid'}}
+                        //style={{backgroundColor: 'darkorchid'}}
+                        style={{height: "300px", backgroundColor: 'darkorchid'}}
                         
                     />
-                </div>
+                    <Board            
+                        data={this.state.board2Data}
+                        eventBusHandle={this.setEventBus2}
+                        tagStyle={{fontSize: '80%'}}
+                        style={{backgroundColor: 'dodgerblue'}}
+                        
+                    />                
+            </div>
         )
     }
 }

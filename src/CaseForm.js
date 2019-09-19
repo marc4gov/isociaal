@@ -1,11 +1,4 @@
 import React from 'react'
-import Select from 'react-select'
-
-const options = [
-    { value: 1, label: 'Casus 1' },
-    { value: 2, label: 'Casus 2' },
-    { value: 3, label: 'Casus 3' },
-  ];
 
 export default class CaseForm extends React.Component {
     constructor(props) {
@@ -13,20 +6,21 @@ export default class CaseForm extends React.Component {
         this.handleChange = this.handleChange.bind(this);
     }
 
-    handleChange = selectedOption => {
-        this.props.onCaseChange(selectedOption.value);
-        console.log(`Option selected:`, selectedOption);
+    handleChange(e) {
+        this.props.onCaseChange(e.target.value);
     };
   
     render() {
-        const selectedOption = null;
+        const casus = this.props.case;
         return (
-            <Select
-                value={selectedOption}
-                defaultValue={options[0]}
-                onChange={this.handleChange}
-                options={options}
-            />
+            <div>
+            Casus 
+            <select value={casus} onChange={this.handleChange}>
+                  <option value="1">Casus 1</option>
+                  <option value="12">Casus 12</option>
+                  <option value="3">Casus 3</option>
+              </select>
+            </div>
       );
     }
 }

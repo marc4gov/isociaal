@@ -1,0 +1,26 @@
+{
+  "lanes": [
+    {
+      "id": "CLIENT",
+      "title": "Client",
+      "style": {"width": 280},
+      "label": "",
+      "cards": []
+    },
+    {
+      "id": "ZORGAANBIEDER",
+      "title": "Zorgaanbieder",
+      "label": "Zorgaanbieder",
+      "style": {"width": 280},
+      "cards": []
+    },
+    {
+      "id": "GEMEENTE",
+      "title": "Gemeente",
+      "label": "gemeente",
+      "style": {"width": 280},
+      "cards": []
+    }
+  ]
+}
+
