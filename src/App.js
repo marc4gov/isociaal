@@ -2,29 +2,19 @@ import React, {Component} from 'react'
 
 import './App.css'
 import {Board} from 'react-trello'
-import Board2 from './Board2'
 import update from 'immutability-helper'
 import CaseForm from './CaseForm'
 import ProductForm from './ProductForm'
 import GemeenteForm from './GemeenteForm'
 import ZorgaanbiederForm from './ZorgaanbiederForm'
 import AfspraakForm from './AfspraakForm'
+import {steps, stepsFuture, makeCard} from './steps'
 
 const data = require('./data.json')
 const data2 = require('./data2.json')
 
 const products = require('./productcode.json')
 const cases = require('./casus.json')
-import {steps, stepsFuture, makeCard} from './steps'
-
-function sleep( millisecondsToWait )
-{
-    var now = new Date().getTime();
-    while ( new Date().getTime() < now + millisecondsToWait )
-    {
-        console.log("waiting...")
-    }
-}
 
 class App extends Component {
 

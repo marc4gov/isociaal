@@ -17,8 +17,9 @@ export default class CaseForm extends React.Component {
             Casus 
             <select value={casus} onChange={this.handleChange}>
                   <option value="1">Casus 1</option>
+                  <option value="11">Casus 11</option>
                   <option value="12">Casus 12</option>
-                  <option value="3">Casus 3</option>
+                  <option value="14">Casus 14</option>
               </select>
             </div>
       );

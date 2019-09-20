@@ -24,6 +24,7 @@ exports.steps = function (casus, description, gemeente, zorgaanbieder, client = 
     switch(casus) {
         case 1:
             steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('1. Toewijzing', gemeente, description, ['301-302'])})
+            steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('1. Beschikking', gemeente, description, ['Brief'])})
             steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('2. ...', client, 'Tijd verstrijkt', ['4 maanden'], '#EB5A46')})
             steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('3. Client ontvangt zorg', zorgaanbieder, description, [''])})          
             steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('2. ..', '4 maanden', 'Tijd verstrijkt', ['4 maanden'], '#EB5A46')})
@@ -38,6 +39,23 @@ exports.steps = function (casus, description, gemeente, zorgaanbieder, client = 
             steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('9. Client ontvangt zorg', zorgaanbieder, description, [''])})
             steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('10. Start Zorg', zorgaanbieder, description, ['305-306'])})
             break;
+
+    case 11:
+            steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('1: Verwijzing', gemeente, 'Verwijzing GI', ['315-316'])})
+            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('2. Navraag', zorgaanbieder, 'Geen contract met ' + zorgaanbieder, ['Geen contract'], '#EB5A46')})
+            steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('3: Reactie', gemeente, 'Geen contract, wel verwijzing en WBP', [])})
+            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('4. Beoordeling', 'Toegang', 'Toegang vergelijkt zorgaanbieders', [])})
+            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('5. Administratie', 'Inkoop', zorgaanbieder + ' wordt opgenomen in administratie', [])})
+            steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('6: Administratie', gemeente, 'Formulier terug', [])})
+            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('7. Afstemming', gemeente, 'Inkoop-BO-ICT-Financiële administratie', [])})
+            steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('8. Toewijzing', gemeente, description, ['301-302'])})
+            steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('8. Beschikking', gemeente, description, ['Brief'])})
+            steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('9. Client ontvangt zorg', zorgaanbieder, description, [])})               
+            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('10. Start Zorg', zorgaanbieder, description, ['305-306'])})
+            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('11. 307-308 berichten', zorgaanbieder, description, ['307-308'])})
+            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('12. Declaratie', zorgaanbieder, description, ['303-304'])})      
+            break;            
+
     case 12:
             steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('1. Client heeft zorgvraag', zorgaanbieder, description, [])})
             steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('2. Client wacht', gemeente, '........', ['Tijd verstrijkt'], '#EB5A46')})
@@ -47,12 +65,11 @@ exports.steps = function (casus, description, gemeente, zorgaanbieder, client = 
             steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('5. Navraag', 'Toegang', 'BO: Aanvraag niet compleet', ['Niet compleet'], '#EB5A46')})
             steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('6: Reparatie', 'Toegang', 'Toegang maakt aanvraag compleet', [])})
             steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('7. Toewijzing', gemeente, description, ['301-302'])})
+            steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('7. Beschikking', gemeente, description, ['Brief'])})
             steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('8. Client ontvangt zorg', zorgaanbieder, description, [])})               
             steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('9. Start Zorg', zorgaanbieder, description, ['305-306'])})
             steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('10. 307-308 berichten', zorgaanbieder, description, ['307-308'])})
-            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('11. Declaratie', zorgaanbieder, description, ['303-304'])})
-            
-            
+            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('11. Declaratie', zorgaanbieder, description, ['303-304'])})      
             break;
         case 3:
             break;
