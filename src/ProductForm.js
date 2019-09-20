@@ -1,5 +1,4 @@
 import React from 'react'
-import Select from 'react-select'
 
 // const options = [
 //   { value="40", label: "Persoonlijke verzorging"},
@@ -65,10 +64,8 @@ export default class ProductForm extends React.Component {
     render() {
       const prcat = this.props.prcat;
       const prcode = this.props.prcode;
-      const afspraak = this.props.afspraak;
       return (
         <div>
-
           <select value={prcat} onChange={this.handleChange}>
                 <option value="40">Persoonlijke verzorging</option>
                 <option value="41">Dagbehandeling</option>
@@ -89,16 +86,11 @@ export default class ProductForm extends React.Component {
                 <option value="L0">Landelijke Transitie Arrangementen</option>      
           </select>
 
-
-
           <select value={prcode} onChange={this.handlePrChange}>
             {this.state.products.map( (product) => <option key={product.Code} value={product.Code}>{product.Betekenis}</option>)}
           </select>
 
-
           </div>
-
-
       );
     }
 }

@@ -16,7 +16,7 @@
     },
     {
       "id": "TOEGANG",
-      "title": "Indicatiestelling/Toegang",
+      "title": "Indicatie/Toegang",
       "label": "tafel 2",
       "style": {"width": 280},
       "cards": []
@@ -30,10 +30,11 @@
     },
     {
       "id": "DECLARATIE",
-      "title": "Declaratie en betaling",
+      "title": "Declaratie/Betaling",
       "style": {"width": 280},
       "label": "tafel 4",
-      "cards": []
+      "cards": [],
+      "droppable": false
     }
   ]
 }

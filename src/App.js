@@ -228,11 +228,33 @@ class App extends Component {
     }
 
     addDeclaratieCard = () => { 
+        const card = this.setDeclaratie()
         this.state.eventBus.publish({
             type: 'ADD_CARD',
             laneId: 'DECLARATIE',
-            card: this.setDeclaratie()
+            card: card
         })
+        if (this.compareLaneAndCard('TOEWIJZINGEN',card)) {
+            const newCard = card
+            let obj = {}
+            obj["key"] = card.id
+            obj["title"] = '304'
+            obj["bgcolor"] = "orange"
+            const newCard1 = makeCard(card.title, card.label, card.description, card.tags.push(obj))
+            this.state.eventBus2.publish({type: 'ADD_CARD', laneId: 'ZORGAANBIEDER', card: newCard1})
+            const newCard2 = card
+            let obj2 = {}
+            obj2["key"] = card.id
+            obj2["title"] = '303d'
+            obj2["bgcolor"] = "orange"
+            let obj3 = {}
+            obj3["key"] = card.id
+            obj3["title"] = 'op tijd'
+            obj3["bgcolor"] = "dodgerblue"
+            const newCard3 = makeCard(card.title, card.label, card.description, card.tags.push([obj2, obj3]))
+            this.state.eventBus2.publish({type: 'ADD_CARD', laneId: 'GEMEENTE', card: newCard3})
+            
+        }
     }
 
     modifyCardTitle = () => {
@@ -255,13 +277,13 @@ class App extends Component {
 
     }
 
-    handleCardClick = (cardId) => {
-        console.log(cardId)
-        const card = this.getCard('DECLARATIE', cardId)
-        if (this.compareLaneAndCard('TOEWIJZINGEN',card)) {
-            this.addBerichtCard('303d-304', 'DECLARATIE', card)
-        }
-    }
+    // handleCardClick = (cardId) => {
+    //     console.log(cardId)
+    //     const card = this.getCard('DECLARATIE', cardId)
+    //     if (this.compareLaneAndCard('TOEWIJZINGEN',card)) {
+    //         this.addBerichtCard('303d-304', 'DECLARATIE', card)
+    //     }
+    // }
 
     handleCaseChange(casus) {
         console.log(casus)

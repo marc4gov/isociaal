@@ -25,7 +25,6 @@ export default class CaseForm extends React.Component {
 
     handleChange = selectedOptions => {
         this.props.onAfspraakChange(selectedOptions);
-        console.log(`Option selected:`, selectedOptions);
     };
   
     render() {
