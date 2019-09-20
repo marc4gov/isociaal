@@ -96,8 +96,13 @@ class App extends Component {
         //this.setState({startLaneId: sourceLaneId, endLaneId: targetLaneId})
         const card = this.getCard(targetLaneId, cardId)
         console.log(card)
+        if (sourceLaneId === 'INKOOP' && targetLaneId === 'TOEGANG') {
+            const newCard = makeCard('2. Indicatiestelling', 'Toegang', card.description, this.state.afspraken, '#EB5A46')
+            this.state.eventBus2.publish({type: 'ADD_CARD',laneId: 'GEMEENTE', card: newCard})
+        }
         if (sourceLaneId === 'TOEGANG' && targetLaneId === 'TOEWIJZINGEN') {
-            this.addBerichtCardBoard2('Toewijzing', 'ZORGAANBIEDER', card)
+            const newCard = makeCard('3. Toewijzing', this.state.gemeente, card.description, this.state.afspraken, '#EB5A46')
+            this.state.eventBus2.publish({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: newCard})
         }
     }
 
@@ -107,31 +112,6 @@ class App extends Component {
 
     setEventBus2 = eventBus2 => {
         this.setState({eventBus2})
-    }
-
-    setBericht(title, card) {
-        let tag = ""
-        switch(title){
-            case "Toewijzing":
-              tag = "301";
-              break;
-            case "Start Zorg":
-              tag = "315";
-              break;
-            case "Declaratie":
-              tag = "303d";
-              break;
-            default:
-              tag = "";
-          }
-        const newcard = {
-            id: "Bericht_" + card.id,
-            title: title,
-            label: this.state.gemeente,
-            description: card.description,
-            tags: [{"key": tag, "title": tag, "bgcolor": "orange"}]
-        }
-        return newcard
     }
 
     setCase() {
@@ -217,29 +197,17 @@ class App extends Component {
 
     playCase = () => {
         console.log("play Case")
-        const casus = this.state.case
-        const prcode = this.state.product 
-        const description = prcode + ": " + this.getProduct(prcode)
-        const stappen = steps(casus, description, this.state.gemeente, this.state.zorgaanbieder)
-        stappen.map((stap) => { this.state.eventBus2.publish(stap)})   
+        const description = this.state.product + ": " + this.getProduct(this.state.product)
+        const stappen = steps(this.state.case, description, this.state.gemeente, this.state.zorgaanbieder)
+        stappen.map((stap) => { return this.state.eventBus2.publish(stap)})   
     }
     
     playFuture = () => {
         console.log("play Future")
-        const casus = this.state.case
-        let stappen = []
-        switch(casus) {
-            case 1: 
-                stappen = stepsFuture(casus)
-                stappen.map((step) => { this.state.eventBus2.publish(step)})
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            default:
-        }        
+        const stappen = stepsFuture(this.state.case, this.state.gemeente, this.state.afspraken)
+        stappen.map((stap) => {return this.state.eventBus2.publish(stap)})
     }
+
     addCaseCard = () => {
         this.state.eventBus.publish({
             type: 'ADD_CARD',
@@ -247,22 +215,6 @@ class App extends Component {
             card: this.setCase()
         })
         this.playCase()
-    }
-
-    addBerichtCard = (bericht, laneId, card) => {
-        this.state.eventBus.publish({
-            type: 'ADD_CARD',
-            laneId: laneId,
-            card: this.setBericht(bericht, card)
-        })
-    }
-
-    addBerichtCardBoard2 = (bericht, laneId, card) => {
-        this.state.eventBus2.publish({
-            type: 'ADD_CARD',
-            laneId: laneId,
-            card: this.setBericht(bericht, card)
-        })
     }
 
     addAfspraakCard = () => {
