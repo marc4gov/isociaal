@@ -238,22 +238,29 @@ class App extends Component {
             const newCard = card
             let obj = {}
             obj["key"] = card.id
-            obj["title"] = '304'
+            obj["title"] = '303d'
             obj["bgcolor"] = "orange"
-            const newCard1 = makeCard(card.title, card.label, card.description, card.tags.push(obj))
-            this.state.eventBus2.publish({type: 'ADD_CARD', laneId: 'ZORGAANBIEDER', card: newCard1})
-            const newCard2 = card
-            let obj2 = {}
-            obj2["key"] = card.id
-            obj2["title"] = '303d'
-            obj2["bgcolor"] = "orange"
-            let obj3 = {}
-            obj3["key"] = card.id
-            obj3["title"] = 'op tijd'
-            obj3["bgcolor"] = "dodgerblue"
-            const newCard3 = makeCard(card.title, card.label, card.description, card.tags.push([obj2, obj3]))
-            this.state.eventBus2.publish({type: 'ADD_CARD', laneId: 'GEMEENTE', card: newCard3})
-            
+            let tgs = card.tags
+            tgs.push(obj)
+            const newCard1 = makeCard('4. Declaratie', card.label, card.description, tgs.map((tag => tag.title)))
+            this.state.eventBus2.publish({type: 'ADD_CARD', laneId: 'GEMEENTE', card: newCard1})
+            obj["title"] = '304'
+            tgs.pop()
+            tgs.push(obj);
+            const newCard2 = makeCard('5. Betaling', card.label, card.description, tgs.map((tag => tag.title)))
+            //const newCard2 = update(card, {title: '5. Betaling', tags: {$set: card.tags}})
+            this.state.eventBus2.publish({type: 'ADD_CARD', laneId: 'ZORGAANBIEDER', card: newCard2})
+            // const newCard2 = card
+            // let obj2 = {}
+            // obj2["key"] = card.id
+            // obj2["title"] = '303d'
+            // obj2["bgcolor"] = "orange"
+            // let obj3 = {}
+            // obj3["key"] = card.id
+            // obj3["title"] = 'op tijd'
+            // obj3["bgcolor"] = "dodgerblue"
+            // const newCard3 = makeCard(card.title, card.label, card.description, card.tags.push([obj2, obj3]))
+            // this.state.eventBus2.publish({type: 'ADD_CARD', laneId: 'GEMEENTE', card: newCard3})
         }
     }
 
