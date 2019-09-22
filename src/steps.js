@@ -22,17 +22,17 @@ exports.steps = function (casus, description, gemeente, zorgaanbieder, client = 
     let steps = []
     switch(casus) {
         case 1:
-            steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('1. Toewijzing', gemeente, description, ['301-302'])})
+            steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('1. Verzoek Toewijzing', gemeente, description, ['301-302'])})
             steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('1. Beschikking', gemeente, description, ['Brief'])})
             steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('2. ...', client, 'Tijd verstrijkt', ['4 maanden'], '#EB5A46')})
             steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('3. Client ontvangt zorg', zorgaanbieder, description, [''])})          
-            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('2. ..', '4 maanden', 'Tijd verstrijkt', ['4 maanden'], '#EB5A46')})
+            steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('2. ....', '4 maanden', 'Tijd verstrijkt', ['4 maanden'], '#EB5A46')})
             steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('3. Start Zorg', zorgaanbieder, description, ['305-306'])})
             steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('4. Uitvalbericht', gemeente, description, ['306a'])})
             steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('5. Navraag', '', description, ['306a'])})
             steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('6. Uitleg', 'Regel', 'Na 3 maanden na 301 geen start zorg, 301 ingetrokken', ['Inkoopcontract p. 18'], '#EB5A46')})
             steps.push({type: 'ADD_CARD',laneId: 'GEMEENTE', card: makeCard('7. ...', '2 weken', 'Afstemming ' + zorgaanbieder + "-" + gemeente,['2 weken'], '#EB5A46')})
-            steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('7. ..', client, 'Client onvangt wellicht geen zorg', ['2 weken'], '#EB5A46')})
+            steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('7. ....', client, 'Client onvangt wellicht geen zorg', ['2 weken'], '#EB5A46')})
 
             steps.push({type: 'ADD_CARD',laneId: 'ZORGAANBIEDER', card: makeCard('8. Toewijzing', gemeente, description, ['301-302'])})
             steps.push({type: 'ADD_CARD',laneId: 'CLIENT', card: makeCard('9. Client ontvangt zorg', zorgaanbieder, description, [''])})
@@ -106,21 +106,23 @@ exports.stepsFuture = function (casus, gemeente, afspraken = []) {
     let steps = []
     switch(casus) {
         case 1:
-            steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId: '1: Toewijzing'})
-            steps.push({type: 'REMOVE_CARD',laneId: 'CLIENT', cardId: '2: ...'})
-            steps.push({type: 'REMOVE_CARD',laneId: 'CLIENT', cardId: '3: Client ontvangt zorg'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId: '1. Verzoek Toewijzing'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'CLIENT', cardId: '1. Beschikking'})
             
-            steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId: '2: ..'})
-            steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId: '3: Start Zorg'})
-            steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId: '4: Uitvalbericht'})
-            steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId: '5: Navraag'})
-            steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId: '6: Uitleg'})
-            steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId: '7: ...'})
-            steps.push({type: 'REMOVE_CARD',laneId: 'CLIENT', cardId: '7: ..'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'CLIENT', cardId: '2. ...'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'CLIENT', cardId: '3. Client ontvangt zorg'})
+            
+            steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId: '2. ....'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId: '3. Start Zorg'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId: '4. Uitvalbericht'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId: '5. Navraag'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId: '6. Uitleg'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId: '7. ...'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'CLIENT', cardId: '7. ....'})
 
-            steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId: '8: Toewijzing'})
-            steps.push({type: 'REMOVE_CARD',laneId: 'CLIENT', cardId: '9: Client ontvangt zorg'})
-            steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId: '10: Start Zorg'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId: '8. Toewijzing'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'CLIENT', cardId: '9. Client ontvangt zorg'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId: '10. Start Zorg'})
             break;
 
         case 2:
@@ -150,7 +152,7 @@ exports.stepsFuture = function (casus, gemeente, afspraken = []) {
             steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId: '9. Declaratie'})      
             break;    
         case 11:
-            steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId:  '1: Verzoek toewijzing'})
+            steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId:  '1. Verzoek toewijzing'})
             steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId:  '2. Navraag'})
             steps.push({type: 'REMOVE_CARD',laneId: 'ZORGAANBIEDER', cardId:  '3. Reactie'})
             steps.push({type: 'REMOVE_CARD',laneId: 'GEMEENTE', cardId:  '4. Beoordeling'})

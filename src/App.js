@@ -95,7 +95,7 @@ class App extends Component {
         console.log(`targetLaneId: ${targetLaneId}`)
         //this.setState({startLaneId: sourceLaneId, endLaneId: targetLaneId})
         const card = this.getCard(targetLaneId, cardId)
-        console.log(card)
+        // // console.log(card)
         if (sourceLaneId === 'INKOOP' && targetLaneId === 'TOEGANG') {
             const newCard = makeCard('2. Indicatiestelling', 'Toegang', card.description, this.state.afspraken, '#EB5A46')
             this.state.eventBus2.publish({type: 'ADD_CARD',laneId: 'GEMEENTE', card: newCard})
@@ -119,7 +119,7 @@ class App extends Component {
         const cs = this.state.case
         const casus = cases.filter((cas) => {return cas.Casus === cs})
         const tgs = Array.from(new Set(casus[0].Berichten.split(" ")))
-        return makeCard("Casus " + cs, this.state.gemeente, casus[0].Actie + "; " + casus[0].Reactie, tgs)
+        return makeCard(casus[0].Naam, this.state.gemeente, casus[0].Actie + "; " + casus[0].Reactie, tgs)
     }
 
     getLane(laneId) {
@@ -196,14 +196,14 @@ class App extends Component {
     }
 
     playCase = () => {
-        console.log("play Case")
+        // console.log("play Case")
         const description = this.state.product + ": " + this.getProduct(this.state.product)
         const stappen = steps(this.state.case, description, this.state.gemeente, this.state.zorgaanbieder)
         stappen.map((stap) => { return this.state.eventBus2.publish(stap)})   
     }
     
     playFuture = () => {
-        console.log("play Future")
+        // console.log("play Future")
         const stappen = stepsFuture(this.state.case, this.state.gemeente, this.state.afspraken)
         stappen.map((stap) => {return this.state.eventBus2.publish(stap)})
     }
@@ -272,15 +272,15 @@ class App extends Component {
 
 
     shouldReceiveNewData = nextData => {
-        console.log('New card has been added')
+        // console.log('New card has been added')
         const data = this.state.boardData
         const newData = update(data, {lanes: {$set: nextData.lanes}})
         this.setState({boardData: newData})     
     }
 
 	handleCardAdd = (card, laneId) => {
-		console.log(`New card added to lane ${laneId}`)
-        console.dir(card)
+		// console.log(`New card added to lane ${laneId}`)
+        // console.dir(card)
 
     }
 
@@ -293,7 +293,7 @@ class App extends Component {
     // }
 
     handleCaseChange(casus) {
-        console.log(casus)
+        // console.log(casus)
         this.setState({case: parseInt(casus)});
     }
 
@@ -327,8 +327,8 @@ class App extends Component {
     render() {     
         return (
             <div className="App">
-                <div className="App-header">
-                    <h3>Future Lane iSociaal</h3>
+                <div>
+                    <img src={require('./ketenbureau.png')} width="200px" />
                 </div>
                 {/* <div className="App-intro"> */}
                 <div className="wrapper">
@@ -336,8 +336,8 @@ class App extends Component {
                 <CaseForm casus={this.state.case} onCaseChange={this.handleCaseChange} />
                 <button onClick={this.addCaseCard} style={{margin: 5}}>
                     Voeg Casus toe
-                </button> Casus {this.state.case}               
-
+                </button>           
+                Product
                 <ProductForm 
                     products={this.state.products}
                     prcode={this.state.product} 
@@ -357,10 +357,6 @@ class App extends Component {
 
                 <button onClick={this.addDeclaratieCard} style={{margin: 5}}>
                     Declareer
-                </button>
-
-                <button onClick={this.playCase} style={{margin: 5}}>
-                    Test
                 </button>
 
                 </div>

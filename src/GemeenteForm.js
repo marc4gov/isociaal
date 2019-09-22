@@ -8,7 +8,7 @@ export default class GemeenteForm extends React.Component {
   
     handleChange(e) {
       this.props.onGemeenteChange(e.target.value);
-      console.log(e.target.value)
+      // console.log(e.target.value)
     }
   
     render() {

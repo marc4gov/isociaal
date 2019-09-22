@@ -46,19 +46,19 @@ export default class ProductForm extends React.Component {
 
     handleChange(e) {
       this.props.onProductCategoryChange(e.target.value);
-      console.log(e.target.value)
+      // console.log(e.target.value)
       this.setState({products: this.getProducts(e.target.value)})
     }
   
     handlePrChange(e) {
       this.props.onProductChange(e.target.value);
-      console.log(e.target.value)
+      // console.log(e.target.value)
     }
 
     handleAfspraakChange(e) {
       this.props.onAfspraakChange(e.target.value);
 
-      console.log(e.target.value)
+      // console.log(e.target.value)
     }
 
     render() {
