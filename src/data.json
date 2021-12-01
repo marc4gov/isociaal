@@ -1,0 +1,41 @@
+{
+  "lanes": [
+    {
+      "id": "CASUS",
+      "title": "Casus",
+      "style": {"width": 280},
+      "label": "",
+      "cards": []
+    },
+    {
+      "id": "INKOOP",
+      "title": "Inkoop/Contracten",
+      "label": "tafel 1",
+      "style": {"width": 280},
+      "cards": []
+    },
+    {
+      "id": "TOEGANG",
+      "title": "Indicatie/Toegang",
+      "label": "tafel 2",
+      "style": {"width": 280},
+      "cards": []
+    },
+    {
+      "id": "TOEWIJZINGEN",
+      "title": "Toewijzingen",
+      "label": "tafel 3",
+      "style": {"width": 280},
+      "cards": []
+    },
+    {
+      "id": "DECLARATIE",
+      "title": "Declaratie/Betaling",
+      "style": {"width": 280},
+      "label": "tafel 4",
+      "cards": [],
+      "droppable": false
+    }
+  ]
+}
+
